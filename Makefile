@@ -1,5 +1,5 @@
 ## This is the makefile to generate the PDF file using pandoc
-TITLE := CHANGE_THIS_TITLE.pdf
+TITLE = OUTPUT.pdf
 
 SOURCE := main.md
 PDF := $(patsubst %.md,%.pdf, $(SOURCE))
@@ -15,11 +15,11 @@ install_windows :
 	@echo -- Downloading pandoc --
 	@curl -L -k https://github.com/jgm/pandoc/releases/download/3.1.8/pandoc-3.1.8-windows-x86_64.zip -o pandoc.zip
 	@echo -- Unzipping pandoc --
-	@unzip pandoc.zip
+	@tar -xvzf pandoc.zip
 	@echo -- Downloading pandoc_latex_admonition.py --
 	@git clone https://github.com/chdemko/pandoc-latex-admonition
 	@echo -- Downloading dependencies --
-	@pip install panflute
+	@py -m pip install panflute
 ##	@curl -L https://github.com/lierdakil/pandoc-crossref/releases/download/v0.3.17.0/pandoc-crossref-Windows.7z -o pandoc-crossref.7z
 ##	@set PATH=%PATH%;C:\Program Files\7-Zip\
 ##	@7z x pandoc-crossref.7z
@@ -36,7 +36,7 @@ install_linux :
 	@echo -- Downloading pandoc_latex_admonition.py --
 	@git clone https://github.com/chdemko/pandoc-latex-admonition
 	@echo -- Downloading dependencies --
-	@pip install panflute
+	@py -m pip install panflute
 
 .PHONY : clean_install_windows
 clean_install_windows :
