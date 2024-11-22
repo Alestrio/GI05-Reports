@@ -46,3 +46,93 @@ output:
         listings: true
 ---
 
+# Part II
+
+## Section II - Main investigations
+### Section a - Planning, control and decision-making for autonomous mono and Multi-Robot Systems (MRS)
+
+Different ideas came to our minds while searching for a solution to a smoother way of navigation.
+
+The first was to draw a circular path like a bézier curve for the robot to follow.
+It involved replacing the current switch in the robot navigation algorithm to a command law which will follow the curve.
+
+The second was to give a command law to the robot that dictates the position to the next waypoint (n+1) with
+an angle that points to the third waypoint (n+2).
+
+The third was to minimize the (j'ai plus le mot) so that the robot would steer less.
+This however would give disadvantages to the robot in manuver precision but would also be smooth.
+
+
+**Making of the first idea**
+
+A bézier curve is a parametric curve which is a set of discrete control points based of the list
+of given waypoints. The idea is to create a smooth path that approaches all waypoints.
+
+![alt text](img/bezierCurveSample.png)
+
+Searching on the web, we've found this sample of script that returns a bezier curve from a list of points :
+
+```bash
+function B = computeBezier(P, t)
+    n = size(P, 2) - 1;
+    B = zeros(2, length(t));
+    for k = 1:length(t)
+        B(:, k) = [0; 0];
+        for i = 0:n
+            B(:, k) = B(:, k) + nchoosek(n, i) * (1 - t(k)).^(n - i) * t(k).^i * P(:, i + 1);
+        end
+    end
+end
+```
+While trying this approach, we've seen that although the given curve is smooth, it does not pass through all prime waypoints.
+
+![alt text](img/bezierCurve2.png)
+
+Instead, we've decided to go for a spline :
+
+```bash
+t_points = 1:size(waypoints, 2);
+t_spline = linspace(1, size(waypoints, 2), 1000);
+spline_curve = spline(t_points, waypoints, t_spline);
+```
+
+A spline is a mathematics function that yields similar results using low degree polynomials. Thus correcting the precedent issue.
+
+![alt text](img/splineCurve.png)
+
+Now that the path is smooth and pass at each prime waypoints. We can set the loop by adding the first waypoint at the end of the list.
+
+```bash
+waypoints = [waypoints, waypoints(:, 1)];
+```
+
+![alt text](img/perfectSpline.png)
+
+**setting a command law to follow the path**
+
+here's the code provided for the robot to follow
+the curve discretized points :
+```bash
+%% Make the leader travel between waypoints
+    
+    current_position = x(1:2, 1);
+    
+    % update target ID    
+    if norm(current_position - spline_curve(:, index_target)) < close_enough % target offset
+        if index_target < length(t_spline)
+            index_target = index_target + 1; % go to next waypoint
+        else
+            index_target = 1; % keep moving toward the current waypoint
+        end
+    end
+    
+    % set the next discretized point on the curve as target
+    target_position = spline_curve(:, index_target);
+    
+    % move towards the target
+    dxi(:, 1) = leader_controller(current_position, target_position);
+```
+
+which gives us this simulation where the unicycle follows a smooth path and goes through each waypoints :
+
+![alt text](img/smoothPath.png)
