@@ -1,10 +1,10 @@
 ---
 note_type: plan
 writing_type: draft 
-title: "AI32 - Compte Rendu TP1"
-subtitle : "TP1 - FISA"
+title: "AI34 - Compte Rendu Projet"
+subtitle : "FISA"
 author: Alexis LEBEL, Justin FERDINAND
-date: "A23"
+date: "A24"
 titlepage: true 
 titlepage-rule-color: "006a9e" 
 titlepage-text-color: "080808" 
@@ -46,10 +46,21 @@ output:
         listings: true
 ---
 
-# Part II
+# Introduction {.unlisted .unnumbered}
 
-## Section II - Main investigations
-### Section a - Planning, control and decision-making for autonomous mono and Multi-Robot Systems (MRS)
+# Getting Started
+
+## Summary of the main steps of `leader_follower_save_data.m`
+
+![Flowchart of the main loop](img/mermaid_main_loop_1pager.png)
+
+# Main investigations
+
+## Planning, control and decision-making
+
+### Proposition of a leader behaviour for smooth target transition
+
+To correct that erratic behaviour, that creates a lot of strains on a real life vehicle components, we propose to implement different solutions.
 
 Different ideas came to our minds while searching for a solution to a smoother way of navigation.
 
@@ -63,7 +74,7 @@ The third was to minimize the (j'ai plus le mot) so that the robot would steer l
 This however would give disadvantages to the robot in manuver precision but would also be smooth.
 
 
-**Making of the first idea**
+#### Using a discretized bezier curve
 
 A bézier curve is a parametric curve which is a set of discrete control points based of the list
 of given waypoints. The idea is to create a smooth path that approaches all waypoints.
@@ -108,7 +119,7 @@ waypoints = [waypoints, waypoints(:, 1)];
 
 ![alt text](img/perfectSpline.png)
 
-**setting a command law to follow the path**
+**Synthetizing a command law to follow the path**
 
 here's the code provided for the robot to follow
 the curve discretized points :
@@ -136,3 +147,5 @@ the curve discretized points :
 which gives us this simulation where the unicycle follows a smooth path and goes through each waypoints :
 
 ![alt text](img/smoothPath.png)
+
+#### Using a command law to point to the next waypoint 
