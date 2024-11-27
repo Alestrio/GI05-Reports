@@ -1,10 +1,10 @@
 ---
 note_type: plan
 writing_type: draft 
-title: "AI32 - Compte Rendu TP1"
-subtitle : "TP1 - FISA"
-author: Alexis LEBEL, Justin FERDINAND
-date: "A23"
+title: "AI34 - Rendu TD2 Réseau"
+subtitle : "FISA"
+author: Alexis LEBEL
+date: "A24"
 titlepage: true 
 titlepage-rule-color: "006a9e" 
 titlepage-text-color: "080808" 
@@ -46,3 +46,36 @@ output:
         listings: true
 ---
 
+# 1. Topologie
+- La topologie est un **mesh localement**, et une **topologie en étoile** pour la dorsale. (**Backbone** : communication de Local Control Center à Remote Grid Control Center). 
+
+# 2. Dorsale
+- La dorsale **WiMax** permet de communiquer sur de longues distances (surtout avec **Line of Sight**) et avec des débits importants (**Gbit/s**).
+
+# 3. Comparaison des technologies
+
+| Catégorie             | Technologie   | Description                                                          | Standard          |
+| --------------------- | ------------- | -------------------------------------------------------------------- | ----------------- |
+| **Backbone**          | **WiMax**     | Réseau Point à Point (étoile) Longue Distance Sans fil et haut-débit | **802.16**        |
+| **Neighborhood Mesh** | **802.11s**   | Réseau maillé                                                        | -                 |
+|                       | **SUNs**      | Réseau maillé                                                        | -                 |
+| **HAN**               | **Zigbee**    | Réseau maillé, faible consommation                                   | **802.15.4**      |
+|                       | **WiFi**      | Réseau étoile haut-debit                                             | **802.11**        |
+|                       | **Bluetooth** | Réseau bas débit, faible portée (PAN)                                | **basé 802.15.1** |
+
+# 4. Caractéristiques
+
+- **Backbone** :
+  - **Haut débit**, **longue distance**.
+
+- **802.11s, SUNs** (Neighborhood Mesh) :
+  - **Self-healing** (autocorrection).
+  - Équilibrage de la charge des liens (**load balancing**).
+
+- **HAN** (Home Area Network) :
+  - **Zigbee** : faible consommation d’énergie, autocorrection (**self-healing**).
+  - **WiFi** : basé sur des technologies existantes.
+  - **Bluetooth** : compatibilité avec les smartphones et autres devices (Smartwatches, etc)
+
+# 5. Réseaux hybrides
+- Les réseaux hybrides sont utilisés pour tirer parti des **avantages** de chaque technologie.
