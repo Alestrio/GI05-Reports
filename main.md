@@ -149,3 +149,59 @@ which gives us this simulation where the unicycle follows a smooth path and goes
 ![alt text](img/smoothPath.png)
 
 #### Using a command law to point to the next waypoint 
+
+
+## adding a fourth follower
+
+```bash
+N = 5
+```
+
+In order to improve the diamond formation, the program uses
+a Laplacian matrix. Since we've added a new follower, we had to
+update the matrix :
+
+![alt text](img/matrice_laplacienne.jpg)
+
+which gives us in matlab :
+
+```bash
+A = [0 1 0 0 0;
+     1 0 1 1 0;
+     0 1 0 1 1;
+     0 1 1 0 1;
+     0 0 1 1 2];
+
+D = [0 0 0 0 0;
+     0 3 0 0 0
+     0 0 3 0 0;
+     0 0 0 3 0;
+     0 0 0 0 2];
+
+L = D - A;
+```
+
+
+
+
+## reaching the nearest point on the curve
+
+To reach the nearest point on the curve before the target, thus, making a better convergence.
+
+The solution was to compute the nearest point using :
+
+```bash
+distances = sqrt(sum((spline_curve - current_position).^2, 1));
+```
+
+and then fetch the lowest distance :
+
+```bash
+[~, index_target] = min(distances);
+```
+
+and then ordering the robot to go to that point, when it reaches this point, it pursuit it's normal behaviour which is to follow each target point on the curve to reach all 4 targets waypoints.
+
+which gives us :
+
+![](img/convergence.png)
