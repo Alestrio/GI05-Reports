@@ -205,3 +205,48 @@ and then ordering the robot to go to that point, when it reaches this point, it 
 which gives us :
 
 ![](img/convergence.png)
+
+## Measuring the level of precision to maintain the desired geometric formation
+
+To measure the level of precision of the diamond formation, we suggest to compute the distance between two robots at each iteration of the simulation to verify that they maintain a similar distance through time.
+
+Thus, we started by defining pairs of robots based from matrix A. Then, we instanciate an array of zero values.
+
+within the main loop, we compute the distance from two robots in a pair at each iteration using this loop :
+
+L'erreur de la distance est calculée à partir de la somme de tous les delta entre les positions du robot A et du robot B de chaque pair au carré.
+
+la formule est de cette forme :
+```latek
+E_{distance} = \sum_{i,j \in Pairs} (d_{ij} - d_{ij}^{ref})^2
+```
+
+```bash
+E_distance = 0;
+    for k = 1:length(distance_pairs_i)
+        i = distance_pairs_i(k);
+        j = distance_pairs_j(k);
+        d_ij = norm(x(1:2, i) - x(1:2, j));
+        E_distance = E_distance + (d_ij - desired_distance)^2;
+    end
+    E_distance_array(t) = E_distance;
+```
+
+et pour afficher le plot de ce tableau :
+
+```bash
+figure;
+subplot(2,1,1);
+plot(1:iterations, E_distance_array, 'LineWidth', 2);
+xlabel('Iteration');
+ylabel('Distance Error');
+title('Distance Error over Time');
+```
+
+Ce qui nous donne ces résultats :
+
+![alt text](img/precisionPlotting.png)
+
+Nous pouvons ainsi observer le début de la simulation où les erreurs de distance sont très élevées. Il s'agit du moment où les robots reprennent position.
+Une fois la formation réalisée, l'erreur de distance devient quasiment nulle et se maintient plus ou moins au fil des itérations de la simulation.
+
