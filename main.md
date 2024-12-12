@@ -60,28 +60,28 @@ output:
 
 ### Proposition of a leader behaviour for smooth target transition
 
-To correct that erratic behaviour, that creates a lot of strains on a real life vehicle components, we propose to implement different solutions.
+To address the issue of erratic navigation behavior, which imposes significant strain on real-world vehicle components, we propose two approaches aimed at achieving smoother transitions between waypoints.
 
-Different ideas came to our minds while searching for a solution to a smoother way of navigation.
+**Exploring Potential Solutions**
+During the exploration phase, three potential strategies emerged:
 
-The first was to draw a circular path like a bézier curve for the robot to follow.
-It involved replacing the current switch in the robot navigation algorithm to a command law which will follow the curve.
+Implementing a Bézier Curve Path
+The idea here was to design a circular or Bézier curve path for the robot to follow, replacing the abrupt waypoint switching in the navigation algorithm with a command law to track the curve.
 
-The second was to give a command law to the robot that dictates the position to the next waypoint (n+1) with
-an angle that points to the third waypoint (n+2).
+Optimizing Orientation at Waypoints
+Another approach involved modifying the command law to direct the robot toward the next waypoint (n+1) while already aligning its orientation for the subsequent waypoint (n+2).
 
-The third was to minimize the (j'ai plus le mot) so that the robot would steer less.
-This however would give disadvantages to the robot in manuver precision but would also be smooth.
+Minimizing Steering Effort
+Reducing the robot's steering angle changes could result in smoother movements. However, this might compromise maneuvering precision in certain situations, creating a trade-off between smoothness and accuracy.
 
-
-#### Using a discretized bezier curve
+#### Implementing a path-based approach
 
 A bézier curve is a parametric curve which is a set of discrete control points based of the list
 of given waypoints. The idea is to create a smooth path that approaches all waypoints.
 
 ![alt text](img/bezierCurveSample.png)
 
-Searching on the web, we've found this sample of script that returns a bezier curve from a list of points :
+While searching on the web, we've found this sample of script that returns a bezier curve from a list of points :
 
 ```bash
 function B = computeBezier(P, t)
@@ -95,40 +95,42 @@ function B = computeBezier(P, t)
     end
 end
 ```
-While trying this approach, we've seen that although the given curve is smooth, it does not pass through all prime waypoints.
+By testing the Bézier curve method, we observed that the generated path was smooth but did not pass through all the designated waypoints, as shown in the following illustration:
 
 ![alt text](img/bezierCurve2.png)
 
-Instead, we've decided to go for a spline :
+To overcome this limitation, we shifted to a spline-based approach. Splines are mathematical functions that generate smooth paths using low-degree polynomials, ensuring that the curve passes through all waypoints.
+
+Here's the matlab code that generate the spline :
 
 ```bash
 t_points = 1:size(waypoints, 2);
 t_spline = linspace(1, size(waypoints, 2), 1000);
 spline_curve = spline(t_points, waypoints, t_spline);
 ```
-
-A spline is a mathematics function that yields similar results using low degree polynomials. Thus correcting the precedent issue.
+The spline-based solution corrected the earlier issue, providing a path that is both smooth and passes through all waypoints:
 
 ![alt text](img/splineCurve.png)
 
-Now that the path is smooth and pass at each prime waypoints. We can set the loop by adding the first waypoint at the end of the list.
+However, the robot would stop at the last waypoint. To create a closed-loop path, the first waypoint is appended to the end of the waypoint list:
 
 ```bash
 waypoints = [waypoints, waypoints(:, 1)];
 ```
+Which finally give theses results in the following final trajectory:
 
 ![alt text](img/perfectSpline.png)
 
 **Synthetizing a command law to follow the path**
 
-here's the code provided for the robot to follow
-the curve discretized points :
+Once the spline path is defined, a command law is implemented to enable the leader robot to follow the discretized curve points. Here’s the code that enables it:
+
 ```bash
 %% Make the leader travel between waypoints
     
-    current_position = x(1:2, 1);
+    current_position = x(1:2, 1); % of the leader
     
-    % update target ID    
+    % update target ID during simulation
     if norm(current_position - spline_curve(:, index_target)) < close_enough % target offset
         if index_target < length(t_spline)
             index_target = index_target + 1; % go to next waypoint
@@ -137,29 +139,87 @@ the curve discretized points :
         end
     end
     
-    % set the next discretized point on the curve as target
-    target_position = spline_curve(:, index_target);
-    
     % move towards the target
     dxi(:, 1) = leader_controller(current_position, target_position);
+
+    % set the next discretized point on the curve as target
+    target_position = spline_curve(:, index_target);
 ```
 
-which gives us this simulation where the unicycle follows a smooth path and goes through each waypoints :
+This code ensures the robot follows a smooth trajectory, as shown in the simulation screenshot below:
 
 ![alt text](img/smoothPath.png)
 
+**Reaching the nearest point on the curve in a smooth way**
+
+To improve convergence, the robot can first move to the nearest point on the curve before proceeding to the next target. This ensures a smoother transition and minimizes deviation from the desired path.
+
+The solution was to compute the nearest point using :
+
+```bash
+distances = sqrt(sum((spline_curve - current_position).^2, 1));
+[~, index_target] = min(distances);
+```
+
+Once the nearest point is identified, the robot is commanded to navigate to that position. After reaching the point, it resumes its normal behavior of following the curve’s discretized points to achieve all target waypoints.
+
+This adjustment produces a smoother convergence, as illustrated here:
+
+![](img/convergence.png)
+
+However, directly moving toward the nearest point in a straight line can disrupt the formation and induce strain on the leader’s trajectory. To resolve this, we propose a smoother approach that involves aligning the robot with the path's tangent before merging.
+
+Smooth Merge Using Tangent Alignment
+Instead of directly targeting the nearest point, the leader robot computes the local tangent of the spline at the nearest point and selects a target further along the tangent. This ensures a gradual and smooth alignment with the curve.
+
+The tangent and the adjusted target point are computed as follows:
+
+```bash
+%compute tangent
+dx_dt = diff(spline_curve(1, :)) ./ diff(t_spline);
+dy_dt = diff(spline_curve(2, :)) ./ diff(t_spline);
+
+
+if index_target < length(t_spline)
+    dx = dx_dt(index_target);
+    dy = dy_dt(index_target);
+else
+    dx = dx_dt(index_target - 1);
+    dy = dy_dt(index_target - 1);
+end
+
+tangent = [dx; dy];
+tangent_norm = norm(tangent);
+if tangent_norm > 0
+    tangent = tangent / tangent_norm;
+else
+    tangent = [1; 0]; % fallback
+end
+
+% adjusting the targer using tangent direction
+look_ahead_distance = 1;
+smooth_target = target_position + look_ahead_distance * tangent;
+```
+
+This method allows the leader to smoothly merge onto the path by following the tangent direction, resulting in a more seamless transition to the spline trajectory:
+
+![alt text](img/smoothTangent.png)
+
+
 #### Using a command law to point to the next waypoint 
 
+@Alexis it's your show there
 
-## adding a fourth follower
+## Adding a Fourth Follower to the Diamond Formation
+
+To expand the symmetric diamond formation, we introduced a fourth follower positioned behind Robots 2 and 3. This required updating the underlying topology of the multi-robot system (MRS) to maintain geometric constraints and ensure a rigid structure.
 
 ```bash
 N = 5
 ```
 
-In order to improve the diamond formation, the program uses
-a Laplacian matrix. Since we've added a new follower, we had to
-update the matrix :
+**Updating the Laplacian Matrix**
+The diamond formation is modeled using a Laplacian matrix to define the interaction topology among the robots. With the addition of the fourth follower, the adjacency matrix A and degree matrix 𝐷 were updated as follows:
 
 ![alt text](img/matrice_laplacienne.jpg)
 
@@ -181,46 +241,40 @@ D = [0 0 0 0 0;
 L = D - A;
 ```
 
+**Benefits of the Updated Topology**
 
+<ins>Rigid Connectivity</ins>: The updated Laplacian matrix ensures the connectivity and geometric constraints of the diamond formation. It maintains symmetry and allows for cohesive movement of the formation.
 
+<ins>Flexibility for Further Changes</ins>: The adjacency matrix structure provides a clear framework for adding more followers or modifying formations in future stages of the project.*
 
-## reaching the nearest point on the curve
+**Simulation Results**
+The updated topology was tested in simulations, demonstrating that the geometric constraints were effectively maintained, and the added follower smoothly integrated into the diamond formation. This rigid structure will serve as the foundation for the remaining phases of the project.
 
-To reach the nearest point on the curve before the target, thus, making a better convergence.
-
-The solution was to compute the nearest point using :
-
-```bash
-distances = sqrt(sum((spline_curve - current_position).^2, 1));
-```
-
-and then fetch the lowest distance :
-
-```bash
-[~, index_target] = min(distances);
-```
-
-and then ordering the robot to go to that point, when it reaches this point, it pursuit it's normal behaviour which is to follow each target point on the curve to reach all 4 targets waypoints.
-
-which gives us :
-
-![](img/convergence.png)
+![alt text](img/diamondShape.png)
 
 ## Measuring the level of precision to maintain the desired geometric formation
 
 To measure the level of precision of the diamond formation, we suggest to compute the distance between two robots at each iteration of the simulation to verify that they maintain a similar distance through time.
 
-Thus, we started by defining pairs of robots based from matrix A. Then, we instanciate an array of zero values.
+**Approach**
 
-within the main loop, we compute the distance from two robots in a pair at each iteration using this loop :
+<ins>Defining Pairs of Robots</ins>:
+Based on the adjacency matrix 𝐴, we defined pairs of robots that should maintain fixed distances during the formation.
 
-L'erreur de la distance est calculée à partir de la somme de tous les delta entre les positions du robot A et du robot B de chaque pair au carré.
+<ins>Distance Error Metric</ins>:
+At each iteration, the distance between two robots in a pair is calculated, and the deviation from the desired distance is squared and summed for all pairs. The error metric is expressed as:
 
-la formule est de cette forme :
-```latek
-E_{distance} = \sum_{i,j \in Pairs} (d_{ij} - d_{ij}^{ref})^2
+![alt text](img/errorMetric.png)
+
+```katex
+E_{distance} = \sum_{
+\begin{subarray}{l}
+   i,j\ \in \text{ Pairs}
+\end{subarray}}(d_{ij} - d_{ij}^{ref})^2
 ```
+with dij being the current distance between robots i and j and dij ref being the disred distance between both robots.
 
+**Implementing in matlab**
 ```bash
 E_distance = 0;
     for k = 1:length(distance_pairs_i)
@@ -232,7 +286,7 @@ E_distance = 0;
     E_distance_array(t) = E_distance;
 ```
 
-et pour afficher le plot de ce tableau :
+**visualizing the results :**
 
 ```bash
 figure;
@@ -243,10 +297,12 @@ ylabel('Distance Error');
 title('Distance Error over Time');
 ```
 
-Ce qui nous donne ces résultats :
+**Results and Observations**
+The plotted results indicate the distance error over time:
 
 ![alt text](img/precisionPlotting.png)
 
-Nous pouvons ainsi observer le début de la simulation où les erreurs de distance sont très élevées. Il s'agit du moment où les robots reprennent position.
-Une fois la formation réalisée, l'erreur de distance devient quasiment nulle et se maintient plus ou moins au fil des itérations de la simulation.
+At the beginning of the simulation, the distance errors are high due to the robots adjusting their initial positions.
+Once the formation stabilizes, the error decreases significantly and remains close to zero, confirming that the geometric formation is maintained effectively throughout the simulation.
 
+@Justin, arrêt avant la question 3.1, il faut poursuivre sur les obstacles
