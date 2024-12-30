@@ -219,7 +219,7 @@ N = 5
 ```
 
 **Updating the Laplacian Matrix**
-The diamond formation is modeled using a Laplacian matrix to define the interaction topology among the robots. With the addition of the fourth follower, the adjacency matrix A and degree matrix 𝐷 were updated as follows:
+The diamond formation is modeled using a Laplacian matrix to define the interaction topology among the robots. With the addition of the fourth follower, the adjacency matrix A and degree matrix $D$ were updated as follows:
 
 ![alt text](img/matrice_laplacienne.jpg)
 
@@ -259,7 +259,7 @@ To measure the level of precision of the diamond formation, we suggest to comput
 **Approach**
 
 <ins>Defining Pairs of Robots</ins>:
-Based on the adjacency matrix 𝐴, we defined pairs of robots that should maintain fixed distances during the formation.
+Based on the adjacency matrix $A$, we defined pairs of robots that should maintain fixed distances during the formation.
 
 <ins>Distance Error Metric</ins>:
 At each iteration, the distance between two robots in a pair is calculated, and the deviation from the desired distance is squared and summed for all pairs. The error metric is expressed as:
@@ -306,3 +306,112 @@ At the beginning of the simulation, the distance errors are high due to the robo
 Once the formation stabilizes, the error decreases significantly and remains close to zero, confirming that the geometric formation is maintained effectively throughout the simulation.
 
 @Justin, arrêt avant la question 3.1, il faut poursuivre sur les obstacles
+
+# Telecommunications and Network Performance Analysis 
+
+## Propagation Model
+
+To effectively analyze signal propagation between agents and the antenna in our urban environment, we implemented the **Walfisch-Ikegami propagation model**. This model was selected due to its particular suitability for urban environments where path distances typically exceed **200 meters** and signal propagation is affected by multiple obstacles such as buildings and infrastructure.
+
+### Model Architecture
+
+The Walfisch-Ikegami model divides signal propagation into two distinct scenarios: **Line of Sight** (LOS) and **Non-Line of Sight** (NLOS). Each scenario employs different mathematical formulations to account for the specific propagation characteristics.
+
+![Walfisch-Ikegami model](img\network\COST-231-Walfish-Ikegami-model.png)
+
+In Line of Sight conditions, the model augments the **Friis free space equation** with urban corrections, expressed as:
+
+$$ L_{LOS} = 69.55 + 26.16\log_{10}(f_c) - 13.82\log_{10}(h_t) + (44.9 - 6.55\log_{10}(h_t))\log_{10}(d) $$
+
+Where $f_c$ represents the carrier frequency in MHz, $h_t$ denotes the transmitter height in meters, and $d$ is the path distance in kilometers.
+
+In Non-Line of Sight conditions, the total path loss is calculated as the sum of three distinct components:
+
+$$ L_{NLOS} = L_0 + L_{rts} + L_{msd} $$
+
+The free space loss L_0 represents the basic signal attenuation in an ideal environment and is computed as:
+
+$$ L_0 = 32.4 + 20\log_{10}(d) + 20\log_{10}(f_c) $$
+
+The rooftop-to-street diffraction loss $L_rts$ accounts for the signal diffraction from the last rooftop to the street level:
+
+$$ L_{rts} = -16.9 - 10\log_{10}(w) + 10\log_{10}(f_c) + 20\log_{10}(h_m) + L_{ori} $$
+
+Where:
+
+- $w$ represents the street width in meters
+- $h_m$ is the height difference between the building and the mobile terminal
+- $L_{ori}$ is the street orientation correction factor
+
+The multi-screen diffraction loss $L_{msd}$ models the attenuation caused by multiple diffractions over successive building rows:
+
+$$ L_{msd} = L_{bsh} + k_a + k_d\log_{10}(d) + k_f\log_{10}(f_c) - 9\log_{10}(b) $$
+
+Where:
+
+- $L_{bsh}$ represents the shadowing gain for higher buildings
+- $k_a$ corresponds to the increase of path loss in cases where base station antennas are below rooftops
+- $k_d$ and $k_f$ are empirical coefficients representing distance and frequency dependence
+- $b$ is the average building separation
+
+This comprehensive path loss model enables accurate prediction of signal attenuation in complex urban environments, taking into account the specific characteristics of the deployment area and the relative positions of transmitters and receivers.
+
+### Signal Quality Assessment
+
+The received signal quality is evaluated through the **Signal-to-Noise Ratio** (SNR), calculated as:
+
+$$ SNR = 10\log_{10}\left(\frac{P_{received}}{N_0}\right) $$
+
+Where P_received is the received signal power and N_0 represents the **noise floor**, which we consider to be **-90 dBm** based on typical urban environment characteristics.
+
+For transmission efficiency evaluation, the system implements **Binary Phase-Shift Keying** (BPSK) modulation. The theoretical **Bit Error Rate** (BER) for BPSK modulation is calculated using:
+
+$$ P_{BPSK} = 0.5 \cdot (1-\sqrt{\frac{SNR}{1-SNR}}) $$
+
+That modulation scheme was chosen because among all the modulations that can be used (BPSK, QPSK, 16-QAM, 64-QAM), BPSK is the most robust and can be used in the most challenging urban environments.
+
+Its robustness is due to the fact that it uses only two symbols to encode the data, which makes it less sensitive to noise and interference. This is particularly important in urban environments where signal degradation can be significant due to obstacles such as buildings and infrastructure.
+
+The different types of modulations aren't part of the scope of this project, so they will be summarized in the following image, to illustrate their sensitivities to interference and noise.
+
+![Modulations explanation](img\network\modulation-diagrams.png)
+
+This fundamental modulation scheme was chosen for its robustness in challenging urban environments, providing reliable communication even in conditions of significant signal degradation. While more complex modulation schemes could potentially offer higher data rates, BPSK ensures consistent and dependable communication between agents and the base station. The trade-off here is between data rate and reliability, with the project prioritizing the latter to ensure seamless communication in most cases.
+
+## Simulation and results
+
+The class diagram for network simulation is shown below:
+
+![Network class diagram](img\network\class-diagram.png)
+
+The simulation is run with the following parameters:
+
+```matlab
+street_width = 20; % meters
+frequency = 1710; % MHz
+building_height = 10; % meters
+rx_height = 2; % meters
+tx_height = 2; % meters
+antenna_tx_height = 10; % meters
+angle = 0; % degrees
+in_between_building_distance = 10; % meters
+emission_power_dbm = -15; % Transmission power in dBm
+noise_floor_dbm = -90; % Typical noise floor
+antenna_drawn = true;
+```
+
+After a full simulation, the following results were obtained:
+
+![Received Power curves during the simulation](img\network\RxP_LOS_NLOS.png)
+
+The received power curves show the signal strength at any time, between the agents, and between the agents and the antenna. The LOS and NLOS conditions are clearly visible, with the signal strength decreasing as the distance increases. This is visible on a logarithmic scale, but is more drastic when viewed on a linear scale (like the Bit Error Rate).
+
+We can see that the signal strength is always above the required threshold for communication, which we consider to be -110dBm (common value for a cell phone, and we do not consider the vehicle has a higher gain antenna and a lower receiver sensitivity).
+
+![Bit Error Rate during the simulation](img\network\BER_LOS_NLOS.png)
+
+What we see here, is that the Bit Error Rate, while low in LOS conditions, skyrockets in NLOS conditions. This is due to the signal being reflected and diffracted by the buildings, which causes the signal to be received with a delay, and with a lower power. This is why the Bit Error Rate is so high in NLOS conditions.
+
+
+
+
