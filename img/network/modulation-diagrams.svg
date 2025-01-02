@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 800 700"
+   version="1.1"
+   id="svg142"
+   sodipodi:docname="modulation-diagrams.svg"
+   inkscape:export-filename="modulation-diagrams.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs146" />
+  <sodipodi:namedview
+     id="namedview144"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="1.1485714"
+     inkscape:cx="400.06219"
+     inkscape:cy="350.43532"
+     inkscape:window-width="1920"
+     inkscape:window-height="991"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg142" />
+  <!-- Background -->
+  <rect
+     width="800"
+     height="700"
+     fill="white"
+     id="rect2" />
+  <!-- Title -->
+  <text
+     x="400"
+     y="30"
+     text-anchor="middle"
+     font-size="20"
+     font-weight="bold"
+     id="text4">Digital Modulation Schemes and RF Signal Components</text>
+  <!-- Constellation Diagrams Section -->
+  <g
+     transform="translate(0, 20) scale(1.2)"
+     id="g94">
+    <!-- BPSK -->
+    <g
+       transform="translate(50, 50)"
+       id="g22">
+      <text
+         x="75"
+         y="20"
+         text-anchor="middle"
+         font-size="14"
+         id="text6">BPSK</text>
+      <text
+         x="75"
+         y="40"
+         text-anchor="middle"
+         font-size="12"
+         id="text8">(1 bit/symbol)</text>
+      <line
+         x1="25"
+         y1="100"
+         x2="125"
+         y2="100"
+         stroke="black"
+         stroke-width="1"
+         id="line10" />
+      <line
+         x1="75"
+         y1="50"
+         x2="75"
+         y2="150"
+         stroke="black"
+         stroke-width="1"
+         id="line12" />
+      <circle
+         cx="45"
+         cy="100"
+         r="5"
+         fill="red"
+         id="circle14" />
+      <circle
+         cx="105"
+         cy="100"
+         r="5"
+         fill="red"
+         id="circle16" />
+      <text
+         x="40"
+         y="90"
+         font-size="12"
+         id="text18">0</text>
+      <text
+         x="100"
+         y="90"
+         font-size="12"
+         id="text20">1</text>
+    </g>
+    <!-- QPSK -->
+    <g
+       transform="translate(250, 50)"
+       id="g48">
+      <text
+         x="125"
+         y="20"
+         text-anchor="middle"
+         font-size="14"
+         id="text24">QPSK</text>
+      <text
+         x="125"
+         y="40"
+         text-anchor="middle"
+         font-size="12"
+         id="text26">(2 bits/symbol)</text>
+      <line
+         x1="75"
+         y1="100"
+         x2="175"
+         y2="100"
+         stroke="black"
+         stroke-width="1"
+         id="line28" />
+      <line
+         x1="125"
+         y1="50"
+         x2="125"
+         y2="150"
+         stroke="black"
+         stroke-width="1"
+         id="line30" />
+      <circle
+         cx="125"
+         cy="60"
+         r="5"
+         fill="blue"
+         id="circle32" />
+      <circle
+         cx="165"
+         cy="100"
+         r="5"
+         fill="blue"
+         id="circle34" />
+      <circle
+         cx="125"
+         cy="140"
+         r="5"
+         fill="blue"
+         id="circle36" />
+      <circle
+         cx="85"
+         cy="100"
+         r="5"
+         fill="blue"
+         id="circle38" />
+      <text
+         x="130"
+         y="55"
+         font-size="12"
+         id="text40">00</text>
+      <text
+         x="170"
+         y="95"
+         font-size="12"
+         id="text42">01</text>
+      <text
+         x="130"
+         y="155"
+         font-size="12"
+         id="text44">11</text>
+      <text
+         x="75"
+         y="95"
+         font-size="12"
+         id="text46">10</text>
+    </g>
+    <!-- 16-QAM -->
+    <g
+       transform="translate(500, 50)"
+       id="g92">
+      <text
+         x="75"
+         y="20"
+         text-anchor="middle"
+         font-size="14"
+         id="text50">16-QAM</text>
+      <text
+         x="75"
+         y="40"
+         text-anchor="middle"
+         font-size="12"
+         id="text52">(4 bits/symbol)</text>
+      <line
+         x1="25"
+         y1="100"
+         x2="125"
+         y2="100"
+         stroke="black"
+         stroke-width="1"
+         id="line54" />
+      <line
+         x1="75"
+         y1="50"
+         x2="75"
+         y2="150"
+         stroke="black"
+         stroke-width="1"
+         id="line56" />
+      <g
+         fill="green"
+         id="g90">
+        <circle
+           cx="45"
+           cy="60"
+           r="4"
+           id="circle58" />
+        <circle
+           cx="65"
+           cy="60"
+           r="4"
+           id="circle60" />
+        <circle
+           cx="85"
+           cy="60"
+           r="4"
+           id="circle62" />
+        <circle
+           cx="105"
+           cy="60"
+           r="4"
+           id="circle64" />
+        <circle
+           cx="45"
+           cy="80"
+           r="4"
+           id="circle66" />
+        <circle
+           cx="65"
+           cy="80"
+           r="4"
+           id="circle68" />
+        <circle
+           cx="85"
+           cy="80"
+           r="4"
+           id="circle70" />
+        <circle
+           cx="105"
+           cy="80"
+           r="4"
+           id="circle72" />
+        <circle
+           cx="45"
+           cy="120"
+           r="4"
+           id="circle74" />
+        <circle
+           cx="65"
+           cy="120"
+           r="4"
+           id="circle76" />
+        <circle
+           cx="85"
+           cy="120"
+           r="4"
+           id="circle78" />
+        <circle
+           cx="105"
+           cy="120"
+           r="4"
+           id="circle80" />
+        <circle
+           cx="45"
+           cy="140"
+           r="4"
+           id="circle82" />
+        <circle
+           cx="65"
+           cy="140"
+           r="4"
+           id="circle84" />
+        <circle
+           cx="85"
+           cy="140"
+           r="4"
+           id="circle86" />
+        <circle
+           cx="105"
+           cy="140"
+           r="4"
+           id="circle88" />
+      </g>
+    </g>
+  </g>
+  <!-- RF Signal Components Section -->
+  <g
+     transform="translate(0, 350)"
+     id="g122">
+    <!-- Section Title -->
+    <text
+       x="400"
+       y="30"
+       text-anchor="middle"
+       font-size="16"
+       id="text96">RF Signal Components</text>
+    <!-- I Component -->
+    <g
+       transform="translate(50, 50)"
+       id="g104">
+      <text
+         x="150"
+         y="0"
+         text-anchor="middle"
+         font-size="14"
+         id="text98">I Component (In-phase)</text>
+      <path
+         d="M 0 50 Q 75 50 75 0 Q 75 -50 150 -50 Q 225 -50 225 0 Q 225 50 300 50"
+         fill="none"
+         stroke="blue"
+         stroke-width="2"
+         id="path100" />
+      <text
+         x="150"
+         y="80"
+         text-anchor="middle"
+         font-size="12"
+         id="text102">I·cos(ωt)</text>
+    </g>
+    <!-- Q Component -->
+    <g
+       transform="translate(450, 50)"
+       id="g112">
+      <text
+         x="150"
+         y="0"
+         text-anchor="middle"
+         font-size="14"
+         id="text106">Q Component (Quadrature)</text>
+      <path
+         d="M 0 0 Q 75 0 75 50 Q 75 100 150 100 Q 225 100 225 50 Q 225 0 300 0"
+         fill="none"
+         stroke="red"
+         stroke-width="2"
+         id="path108" />
+      <text
+         x="150"
+         y="80"
+         text-anchor="middle"
+         font-size="12"
+         id="text110">-Q·sin(ωt)</text>
+    </g>
+    <!-- Combined Signal -->
+    <g
+       transform="translate(250, 150)"
+       id="g120">
+      <text
+         x="150"
+         y="0"
+         text-anchor="middle"
+         font-size="14"
+         id="text114">Combined RF Signal</text>
+      <path
+         d="M 0 25 Q 37.5 -25 75 25 Q 112.5 75 150 25 Q 187.5 -25 225 25 Q 262.5 75 300 25"
+         fill="none"
+         stroke="purple"
+         stroke-width="2"
+         id="path116" />
+      <text
+         x="150"
+         y="80"
+         text-anchor="middle"
+         font-size="12"
+         id="text118">s(t) = I·cos(ωt) - Q·sin(ωt)</text>
+    </g>
+  </g>
+  <!-- Physical Meaning Section -->
+  <g
+     transform="translate(50, 600)"
+     id="g140">
+    <g
+       transform="translate(0, 0)"
+       id="g130">
+      <text
+         x="225"
+         y="0"
+         text-anchor="middle"
+         font-size="14"
+         font-weight="bold"
+         id="text124">Signal Components</text>
+      <text
+         x="225"
+         y="25"
+         text-anchor="middle"
+         font-size="12"
+         id="text126">• I Component: Amplitude of reference carrier cos(ωt)</text>
+      <text
+         x="225"
+         y="45"
+         text-anchor="middle"
+         font-size="12"
+         id="text128">• Q Component: Amplitude of 90° shifted carrier -sin(ωt)</text>
+    </g>
+    <g
+       transform="translate(500, 0)"
+       id="g138">
+      <text
+         x="125"
+         y="0"
+         text-anchor="middle"
+         font-size="14"
+         font-weight="bold"
+         id="text132">Constellation Properties</text>
+      <text
+         x="125"
+         y="25"
+         text-anchor="middle"
+         font-size="12"
+         id="text134">• Distance = Signal amplitude</text>
+      <text
+         x="125"
+         y="45"
+         text-anchor="middle"
+         font-size="12"
+         id="text136">• Angle = Signal phase</text>
+    </g>
+  </g>
+</svg>

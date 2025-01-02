@@ -1,0 +1,42 @@
+classDiagram
+    class SY28_network_utils {
+        -street_width: float
+        -frequency: float
+        -building_height: float
+        -rx_height: float
+        -tx_height: float
+        -angle: float
+        -in_between_building_distance: float
+        -emission_power_dbm: float
+        -noise_floor_dbm: float
+        -antenna_drawn: boolean
+        -fig_attenuation: Figure
+        -fig_power: Figure
+        -fig_ber: Figure
+        +SY28_network_utils(parameters...)
+        +networkStep(agents, environment): tuple
+        -computeNetworkMetrics(agents, environment): tuple
+        -addNewMetricsToPlot(Attenuations, ReceivedPowers, BERs, steps): void
+        -computeDistance(agent1, agent2): float
+        -checkLoS(agent1, agent2, obstacles): boolean
+    }
+
+    class PropagationModel {
+        +WalfishIkegami_LOS(distance, frequency): float
+        +WalfishIkegami_NLOS(params...): float
+    }
+
+    class Agent {
+        +x: float
+        +y: float
+        +theta: float
+    }
+
+    class Environment {
+        +obstacles: Array
+        +dimensions: tuple
+    }
+
+    SY28_network_utils ..> PropagationModel: uses
+    SY28_network_utils --> Agent: monitors
+    SY28_network_utils --> Environment: analyzes
