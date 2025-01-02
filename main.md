@@ -307,9 +307,10 @@ L = D - A;
 <ins>Flexibility for Further Changes</ins>: The adjacency matrix structure provides a clear framework for adding more followers or modifying formations in future stages of the project.*
 
 **Simulation Results**
+
 The updated topology was tested in simulations, demonstrating that the geometric constraints were effectively maintained, and the added follower smoothly integrated into the diamond formation. This rigid structure will serve as the foundation for the remaining phases of the project.
 
-![alt text](img/diamondShape.png)
+![Agents in diamond formation](img/diamondShape.png)
 
 ## Measuring the level of precision to maintain the desired geometric formation
 
@@ -323,7 +324,7 @@ Based on the adjacency matrix $A$, we defined pairs of robots that should mainta
 <ins>Distance Error Metric</ins>:
 At each iteration, the distance between two robots in a pair is calculated, and the deviation from the desired distance is squared and summed for all pairs. The error metric is expressed as:
 
-![alt text](img/errorMetric.png)
+![Error formulation](img/errorMetric.png)
 
 ```katex
 E_{distance} = \sum_{
@@ -334,6 +335,7 @@ E_{distance} = \sum_{
 with dij being the current distance between robots i and j and dij ref being the disred distance between both robots.
 
 **Implementing in matlab**
+
 ```bash
 E_distance = 0;
     for k = 1:length(distance_pairs_i)
@@ -357,9 +359,10 @@ title('Distance Error over Time');
 ```
 
 **Results and Observations**
+
 The plotted results indicate the distance error over time:
 
-![alt text](img/precisionPlotting.png)
+![Distance Error over Time](img/precisionPlotting.png)
 
 At the beginning of the simulation, the distance errors are high due to the robots adjusting their initial positions.
 Once the formation stabilizes, the error decreases significantly and remains close to zero, confirming that the geometric formation is maintained effectively throughout the simulation.
