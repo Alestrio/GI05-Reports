@@ -15,7 +15,7 @@ toc: true
 listing: true
 listingTitle: Extrait de code
 codeBlockCaptions: true
-toc-title : Table des Matières
+toc-title : Table of Contents
 lofTitle : Table des Illustrations
 lolTitle : Table des Extraits de Code
 toc-own-page: true
