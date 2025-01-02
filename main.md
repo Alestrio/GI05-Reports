@@ -382,7 +382,7 @@ This fundamental modulation scheme was chosen for its robustness in challenging 
 
 The class diagram for network simulation is shown below:
 
-![Network class diagram](img\network\class-diagram.png)
+![Network class diagram](img\network\class-diagram.png){ width=80% }
 
 The simulation is run with the following parameters:
 
