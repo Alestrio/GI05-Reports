@@ -305,4 +305,85 @@ The plotted results indicate the distance error over time:
 At the beginning of the simulation, the distance errors are high due to the robots adjusting their initial positions.
 Once the formation stabilizes, the error decreases significantly and remains close to zero, confirming that the geometric formation is maintained effectively throughout the simulation.
 
-@Justin, arrêt avant la question 3.1, il faut poursuivre sur les obstacles
+# Obstacles avoidance
+
+1. Addition of obstacles
+
+We treat obstacles as simple circles in the plane. Each obstacle has an 
+(x,y) center and a fixed radius. We place these circles in the environment 
+by defining a matrix of obstacle positions, then drawing them. For example:
+
+```bash
+% List of obstacles as (x, y) centers
+obstacles = [
+    0.5, 0.5;
+   -0.5, -0.2;
+    0.0, -0.7
+];
+
+obstacle_radius = 0.15;  % radius of each obstacle
+
+% Plot them (one circle for each row in 'obstacles')
+hold on;
+for i = 1:size(obstacles, 1)
+    theta = linspace(0, 2*pi, 50);
+    x_circle = obstacle_radius * cos(theta) + obstacles(i, 1);
+    y_circle = obstacle_radius * sin(theta) + obstacles(i, 2);
+    fill(x_circle, y_circle, 'r', ...
+         'FaceAlpha', 0.3, 'EdgeColor', 'r');
+end
+hold off;
+```
+
+We store obstacles in a matrix, with each row representing an obstacle' center.
+
+2. Obstacle avoidance
+
+After computing the formation control for the robots, we run an algorithm to detect any obstacle that lies on the path of one of the robots.
+
+For this, we compute the distance between each robot and each obstacle:
+
+```bash
+dist_to_obstacle = norm(x(1:2, i) - obstacle_position);
+```
+
+- If, due to a bug or any unexpected situation, the robot ends up inside the obstacle’s circle (dist_to_obstacle < obstacle_radius), we push it strongly away using a repulsive force.
+- If the robot’s distance to the obstacle is below some minimum distance (but still outside the obstacle), it will “steer around” it. This is done by computing a tangential direction and updating the robot’s velocity command accordingly.
+
+To manage the new command law, the robot's velocity is updated to combine:
+The tangential direction (to move around the obstacle) multiplied with a gain,
+and a small repulsive component to push the robot further from the obstacle.
+
+```bash
+dxi(:, i) = dxi(:, i) + tangent_gain * tangent_dir + radial_gain  * direction_out;
+```
+
+![alt text](img/image.png)
+
+*Picture of the robot leader avoiding an obstacle by orbiting arround it.*
+
+
+3. Formation switching
+
+When traveling, the robot might encounter obstacles while in a diamond formation, which can lead to sharper or “tighter” maneuvers. 
+Hence, we implemented a “formation switch” so the robots can follow a line formation when an obstacle is too close. This tends to be smoother in narrow spaces.
+
+Once the obstacle is avoided, the robots revert to (recover) the diamond formation.
+
+To enable this switch, we introduce a new Laplacian matrix:
+
+
+```bash
+L_line = [1 -1 0 0 0;
+          -1 2 -1 0 0;
+          0 -1 2 -1 0;
+          0 0 -1 2 -1;
+          0 0 0 -1 1];
+```
+We also define hysteresis thresholds for the minimal distance between any robot and an obstacle. 
+If that distance becomes too small, we switch to the line formation; once it’s safe again, we switch back to diamond.
+
+The final avoiding formation is a chain line from the leader all the way to the last following robot.
+
+![alt text](img/image-1.png)
+*Picture of the straight line reverting to the diamond formation after encountering an obstacle*
