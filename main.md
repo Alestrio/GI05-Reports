@@ -371,6 +371,25 @@ Once the formation stabilizes, the error decreases significantly and remains clo
 
 # Telecommunications and Network Performance Analysis 
 
+## Choice of Transmission Technology
+
+For the inter-vehicle communication system, we propose a hybrid approach combining **Long Term Evolution (LTE)** and **Narrowband Internet of Things (NB-IoT)** technologies operating on the same center frequency of **1710 MHz**. This dual-technology architecture leverages the complementary strengths of both protocols to enhance the robustness and efficiency of **vehicle-to-vehicle (V2V)** communications.
+
+The primary LTE system provides high-performance characteristics through its support for **adaptive modulation schemes**, including **QPSK**, **16-QAM**, and **64-QAM**. This adaptability allows the system to maintain optimal transmission rates as **channel conditions** fluctuate in urban environments. With **peak data rates** of up to **100 Mbps** and **latency** under **20 milliseconds**, LTE serves as the primary channel for **time-critical** control and coordination data.
+
+Operating alongside LTE, the NB-IoT component provides a robust backup channel utilizing the same frequency band but with a narrow **bandwidth** of **180 kHz**. This secondary system offers **enhanced coverage** with up to **20 dB** additional **link budget**, ensuring maintained connectivity even in challenging urban scenarios such as underground passages or densely built areas. While NB-IoT's data rates are lower (**62.5 kbps** uplink, **27.2 kbps** downlink), they remain sufficient for essential vehicle coordination data.
+
+The dual-system approach implements sophisticated **Quality of Service (QoS)** mechanisms that dynamically route communications between the LTE and NB-IoT channels based on:
+
+- **Signal conditions**
+- **Message priority**
+- **Network congestion**
+- **Power efficiency** requirements
+
+Both systems benefit from robust **Forward Error Correction (FEC)** and **Automatic Repeat Request (ARQ)** mechanisms, providing redundancy against **multipath effects** and **shadowing** in urban environments. The combination of LTE's **high throughput** with NB-IoT's **enhanced coverage** creates a highly reliable **communication infrastructure** suitable for autonomous vehicle formations.
+
+This hybrid architecture maintains **backward compatibility** with existing LTE networks while adding the enhanced coverage and reliability benefits of NB-IoT, all within the same **frequency allocation**. The shared frequency usage optimizes **spectrum efficiency** while providing **redundant communication paths** for critical vehicle coordination data.
+
 ## Propagation Model
 
 To effectively analyze signal propagation between agents and the antenna in our urban environment, we implemented the **Walfisch-Ikegami propagation model**. This model was selected due to its particular suitability for urban environments where path distances typically exceed **200 meters** and signal propagation is affected by multiple obstacles such as buildings and infrastructure.
