@@ -493,6 +493,21 @@ We can see that the signal strength is always above the required threshold for c
 
 What we see here, is that the Bit Error Rate, while low in LOS conditions, skyrockets in NLOS conditions. This is due to the signal being reflected and diffracted by the buildings, which causes the signal to be received with a delay, and with a lower power. This is why the Bit Error Rate is so high in NLOS conditions.
 
+\newpage
 
+# Conclusion {.unlisted .unnumbered}
+
+\newpage
+
+# Bibliography {.unlisted .unnumbered}
+
+## Control and Decision-Making {.unlisted .unnumbered}
+
+## Telecommunications {.unlisted .unnumbered}
+
+1. Walfisch, J., & Bertoni, H. L. (1988). A theoretical model of UHF propagation in urban environments. IEEE Transactions on Antennas and Propagation, 36(12), 1788-1796.
+2. Bilal, Khalid. (2015). Bit Error Rate Performance of Long Term Evolution (LTE) Network. International Journal of Engineering, Applied and Management Sciences Paradigms. 22. 2320-6608. 
+3. V. Vrabie (2022). M3106 Large Band Transmissions Class Slides. IUT Châlons-en-Champagne.
+4. M. Chen, Y. Miao, Y. Hao and K. Hwang, "Narrow Band Internet of Things," in IEEE Access, vol. 5, pp. 20557-20577, 2017, doi: 10.1109/ACCESS.2017.2751586.
 
 
