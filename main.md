@@ -247,9 +247,42 @@ N = 5
 **Updating the Laplacian Matrix**
 The diamond formation is modeled using a Laplacian matrix to define the interaction topology among the robots. With the addition of the fourth follower, the adjacency matrix A and degree matrix $D$ were updated as follows:
 
-![alt text](img/matrice_laplacienne.jpg)
+$$
+L_1 = \begin{pmatrix} 
+2 & -1 & -1 \\
+-1 & 2 & -1 \\
+-1 & -1 & 2
+\end{pmatrix}
+$$
 
-which gives us in matlab :
+This matrix represents a fundamental triangular formation where all robots are equally connected. Each diagonal element value of 2 indicates that each robot maintains two connections with other robots. The off-diagonal elements of -1 show bidirectional connections between robots, creating a stable, symmetric formation. This structure ensures that each robot maintains equal influence on the overall formation.
+
+$$
+L_2 = \begin{pmatrix}
+0 & -1 & 0 & 0 & 0 \\
+-1 & 3 & -1 & -1 & 0 \\
+0 & -1 & 2 & -1 & 0 \\
+0 & -1 & -1 & 2 & 0
+\end{pmatrix}
+$$
+
+This matrix introduces the leader-follower hierarchy. The first row and column represent the leader (Robot A), which maintains a single connection to Robot B. The value of 3 in the second row indicates that Robot B acts as a central node, maintaining connections with the leader and two other followers. The remaining structure shows how followers C and D are interconnected to maintain formation stability while following the leader's movements.
+
+$$
+L_3 = \begin{pmatrix}
+0 & -1 & 0 & 0 & 0 \\
+-1 & 3 & -1 & -1 & 0 \\
+0 & -1 & 3 & -1 & -1 \\
+0 & -1 & -1 & 3 & -1 \\
+0 & 0 & -1 & -1 & 2
+\end{pmatrix}
+$$
+
+This matrix represents the final diamond formation with five robots. The structure builds upon $L_2$ by adding Robot E to complete the diamond shape. The leader (Robot A) maintains its single connection to Robot B, while Robot B remains a central node with three connections. The new addition, Robot E, maintains two connections with Robots C and D, creating a symmetric diamond formation. The diagonal elements (0, 3, 3, 3, 2) indicate the number of connections each robot maintains, ensuring formation rigidity and stability during movement.
+
+Each matrix progressively builds upon the previous one, demonstrating how the formation control system evolves from a simple triangular configuration to a more complex diamond formation while maintaining essential properties of stability and controlled movement.
+
+In MATLAB, it translates to the following code:
 
 ```bash
 A = [0 1 0 0 0;
