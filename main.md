@@ -71,10 +71,40 @@ The idea here was to design a circular or Bézier curve path for the robot to fo
 Optimizing Orientation at Waypoints
 Another approach involved modifying the command law to direct the robot toward the next waypoint (n+1) while already aligning its orientation for the subsequent waypoint (n+2).
 
-Minimizing Steering Effort
-Reducing the robot's steering angle changes could result in smoother movements. However, this might compromise maneuvering precision in certain situations, creating a trade-off between smoothness and accuracy.
+### Implementing Command Law for Smooth Transition
 
-#### Implementing a path-based approach
+To achieve smoother transitions between waypoints while maintaining formation integrity, we implemented a command law based on Robotarium's **automatic parking controller**. This approach considers both position and orientation simultaneously, enabling the *leader robot* to align itself with the next waypoint's orientation while approaching it.
+
+#### Command Law Formulation 
+
+The controller generates velocity commands based on three key components:
+1. The *position error* between current pose and target waypoint
+2. The *approach angle* to the target
+3. The *desired final orientation* at the target
+
+For a given waypoint ($x_t$, $y_t$, $\theta_t$), the **control inputs** are computed through two primary gains that determine the smoothness and precision of the trajectory:
+
+- An **approach angle gain** (*k_approach*) that guides the robot's trajectory
+- A **desired angle gain** (*k_desired*) that aligns the robot with the target orientation
+
+The new parameter introduced in this command law is the target orientation $\theta_t$, which is computed as the angle between the current waypoint and the next one in the sequence. This enables the robot to prepare its orientation for the upcoming waypoint transition while still approaching the current target:
+
+```matlab
+waypoints = [-0.8 0.6 -pi/2;  // x, y, orientation
+            -0.8 -0.6 0;
+             0.8 -0.6 pi/2;
+             0.8 0.6 pi]';
+```
+
+The controller implementation sets appropriate gains to balance smooth motion with accurate positioning:
+
+```matlab
+leader_controller = create_automatic_parking_controller(
+    'ApproachAngleGain', 1.2, 
+    'DesiredAngleGain', 3
+);
+```
+
 
 A bézier curve is a parametric curve which is a set of discrete control points based of the list
 of given waypoints. The idea is to create a smooth path that approaches all waypoints.
