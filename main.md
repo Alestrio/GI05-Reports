@@ -54,21 +54,20 @@ output:
 
 ![Flowchart of the main loop](img/mermaid_main_loop_1pager.png)
 
-# Main investigations
+# Planning, control and decision-making
 
-## Planning, control and decision-making
-
-### Proposition of a leader behaviour for smooth target transition
+## Proposition of a leader behaviour for smooth target transition
 
 To address the issue of erratic navigation behavior, which imposes significant strain on real-world vehicle components, we propose two approaches aimed at achieving smoother transitions between waypoints.
 
-**Exploring Potential Solutions**
 During the exploration phase, three potential strategies emerged:
 
-Implementing a Bézier Curve Path
+__Implementing a Bézier Curve Path__
+
 The idea here was to design a circular or Bézier curve path for the robot to follow, replacing the abrupt waypoint switching in the navigation algorithm with a command law to track the curve.
 
-Optimizing Orientation at Waypoints
+__Optimizing Orientation at Waypoints__
+
 Another approach involved modifying the command law to direct the robot toward the next waypoint (n+1) while already aligning its orientation for the subsequent waypoint (n+2).
 
 ### Implementing Command Law for Smooth Transition
@@ -105,11 +104,12 @@ leader_controller = create_automatic_parking_controller(
 );
 ```
 
+### Implementing a path-based approach
 
 A bézier curve is a parametric curve which is a set of discrete control points based of the list
 of given waypoints. The idea is to create a smooth path that approaches all waypoints.
 
-![alt text](img/bezierCurveSample.png)
+![Bezier definition](img/bezierCurveSample.png)
 
 While searching on the web, we've found this sample of script that returns a bezier curve from a list of points :
 
@@ -125,9 +125,10 @@ function B = computeBezier(P, t)
     end
 end
 ```
+
 By testing the Bézier curve method, we observed that the generated path was smooth but did not pass through all the designated waypoints, as shown in the following illustration:
 
-![alt text](img/bezierCurve2.png)
+![Primitive Bezier Curve](img/bezierCurve2.png)
 
 To overcome this limitation, we shifted to a spline-based approach. Splines are mathematical functions that generate smooth paths using low-degree polynomials, ensuring that the curve passes through all waypoints.
 
@@ -140,7 +141,7 @@ spline_curve = spline(t_points, waypoints, t_spline);
 ```
 The spline-based solution corrected the earlier issue, providing a path that is both smooth and passes through all waypoints:
 
-![alt text](img/splineCurve.png)
+![Bezier Curve](img/splineCurve.png)
 
 However, the robot would stop at the last waypoint. To create a closed-loop path, the first waypoint is appended to the end of the waypoint list:
 
@@ -149,7 +150,7 @@ waypoints = [waypoints, waypoints(:, 1)];
 ```
 Which finally give theses results in the following final trajectory:
 
-![alt text](img/perfectSpline.png)
+![Best obtainable Bezier Curve](img/perfectSpline.png)
 
 **Synthetizing a command law to follow the path**
 
@@ -178,7 +179,7 @@ Once the spline path is defined, a command law is implemented to enable the lead
 
 This code ensures the robot follows a smooth trajectory, as shown in the simulation screenshot below:
 
-![alt text](img/smoothPath.png)
+![Robots following curve](img/smoothPath.png)
 
 **Reaching the nearest point on the curve in a smooth way**
 
@@ -195,7 +196,7 @@ Once the nearest point is identified, the robot is commanded to navigate to that
 
 This adjustment produces a smoother convergence, as illustrated here:
 
-![](img/convergence.png)
+![Convergence Behaviour](img/convergence.png)
 
 However, directly moving toward the nearest point in a straight line can disrupt the formation and induce strain on the leader’s trajectory. To resolve this, we propose a smoother approach that involves aligning the robot with the path's tangent before merging.
 
@@ -233,12 +234,7 @@ smooth_target = target_position + look_ahead_distance * tangent;
 
 This method allows the leader to smoothly merge onto the path by following the tangent direction, resulting in a more seamless transition to the spline trajectory:
 
-![alt text](img/smoothTangent.png)
-
-
-#### Using a command law to point to the next waypoint 
-
-@Alexis it's your show there
+![Tangeancial merge](img/smoothTangent.png)
 
 ## Adding a Fourth Follower to the Diamond Formation
 
