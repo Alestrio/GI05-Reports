@@ -379,14 +379,14 @@ The primary LTE system provides high-performance characteristics through its sup
 
 Operating alongside LTE, the NB-IoT component provides a robust backup channel utilizing the same frequency band but with a narrow **bandwidth** of **180 kHz**. This secondary system offers **enhanced coverage** with up to **20 dB** additional **link budget**, ensuring maintained connectivity even in challenging urban scenarios such as underground passages or densely built areas. While NB-IoT's data rates are lower (**62.5 kbps** uplink, **27.2 kbps** downlink), they remain sufficient for essential vehicle coordination data.
 
-The dual-system approach implements sophisticated **Quality of Service (QoS)** mechanisms that dynamically route communications between the LTE and NB-IoT channels based on:
+The dual-system approach supposedly implements sophisticated **Quality of Service (QoS)** mechanisms that dynamically route communications between the LTE and NB-IoT channels based on:
 
 - **Signal conditions**
 - **Message priority**
 - **Network congestion**
 - **Power efficiency** requirements
 
-Both systems benefit from robust **Forward Error Correction (FEC)** and **Automatic Repeat Request (ARQ)** mechanisms, providing redundancy against **multipath effects** and **shadowing** in urban environments. The combination of LTE's **high throughput** with NB-IoT's **enhanced coverage** creates a highly reliable **communication infrastructure** suitable for autonomous vehicle formations.
+As per protocols definitions, both systems benefit from robust **Forward Error Correction (FEC)** and **Automatic Repeat Request (ARQ)** mechanisms, providing redundancy against **multipath effects** and **shadowing** in urban environments. The combination of LTE's **high throughput** with NB-IoT's **enhanced coverage** creates a highly reliable **communication infrastructure** suitable for autonomous vehicle formations.
 
 This hybrid architecture maintains **backward compatibility** with existing LTE networks while adding the enhanced coverage and reliability benefits of NB-IoT, all within the same **frequency allocation**. The shared frequency usage optimizes **spectrum efficiency** while providing **redundant communication paths** for critical vehicle coordination data.
 
