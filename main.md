@@ -51,13 +51,13 @@ output:
 Dans le cadre de cette étude, nous explorons la fusion de données issues de capteurs embarqués, en portant une attention aux erreurs d'accélération qui surviennent lors de la mesure par l'accéléromètre.
 
 Ces erreurs d'accélération représentent une limitation des systèmes de mesure inertielle. Ce phénomène se caractérise par l'impact de l'accélération sur la réaction mesurée par l'accéléromètre, conduisant à des imprécisions dans l'estimation des mouvements. Dans notre configuration, l'utilisation de l'accéléromètre, du gyroscope et du GPS vise à mitiger ce problème.
+L'installation est réalisée sur une trottinette électrique. De nature instable, il est intéréssant d'étudier la donnée obtenue afin d'observer le tangage, le roulis et l'accélération du véhicule.
 
 La correction du roulis, liée aux erreurs d'accélération, est réalisée par l'exploitation des données de vitesse GPS. Cette stratégie permet de recaler et de stabiliser les mesures inertielles, réduisant les imprécisions induites par l'impact de l'accélération sur la réaction de l'accéléromètre.
 
 Notre dispositif repose sur trois capteurs : un accéléromètre, un gyroscope et un récepteur GPS. L'objectif est de procéder à l'estimation des angles d'inclinaison tridimensionnels, incluant le roulis, le tangage et le lacet, tout en minimisant les erreurs d'accélération.
-
-Le protocole de récupération des données a été conçu, s'appuyant sur l'application mobile "Physics Toolbox Suite", permettant l'enregistrement des mesures dans un fichier CSV. L'acquisition s'est déroulée sur une trotinette électrique, offrant un environnement pour l'étude de ces erreurs d'accélération.
-
+![alt text](image-1.png)
+Le protocole de récupération des données a été conçu, s'appuyant sur l'application mobile "Physics Toolbox Suite", permettant l'enregistrement des mesures dans un fichier CSV. L'acquisition s'est déroulée sur le manche de la trottinette, offrant un environnement pour l'étude de ces erreurs d'accélération.
 Les traitements des données seront effectués via Matlab. Nous mettrons en œuvre des algorithmes de correction des erreurs d'accélération. La correction du lacet, complémentaire à celle du roulis, sera réalisée par l'utilisation de l'azimut GPS, renforçant la fiabilité des mesures.
 
 Cette approche permet une caractérisation des mouvements, en proposant une solution au défi posé par les erreurs d'accélération, ouvrant des perspectives dans la compréhension des dynamiques de déplacement.
@@ -68,17 +68,17 @@ Cette approche permet une caractérisation des mouvements, en proposant une solu
 
 ### Exigences fonctionnelles :
 
-1. La solution fusionne les données de trois capteurs (accéléromètre, gyroscope, données GPS)
-2. La solution estime les angles d'inclinaison (roulis, tangage, lacet)
-3. La solution corrige le lacet via l'azimut GPS
-4. La solution acquiert les données via l'application "Physics Toolbox Suite" à une fréquence de 10Hz minimum
-5. La solution enregistre les mesures au format CSV
+1. La solution doit fusionner les données de trois capteurs (accéléromètre, gyroscope, données GPS)
+2. La solution doit estimer les angles d'inclinaison (roulis, tangage, lacet)
+3. La solution doit corriger le lacet via l'azimut GPS
+4. La solution doit acquérir les données via l'application "Physics Toolbox Suite" à une fréquence de 10Hz minimum
+5. La solution doit enregistrer les mesures au format CSV
 
 ### Exigences extra-fonctionnelles :
 
-1. La solution fonctionne dans toutes les conditions de vitesse
-2. La solution fonctionne dans des conditions de vibrations fortes
-3. La solution fonctionne dans toutes les conditions de température (biais thermique intrinsèque)
+1. La solution doit fonctionner dans toutes les conditions de vitesse
+2. La solution doit fonctionner dans des conditions de vibrations fortes
+3. La solution doit fonctionner dans toutes les conditions de température (biais thermique intrinsèque)
 
 ## Première approche : Filtre complémentaire
 
@@ -221,6 +221,9 @@ Le filtre complémentaire, malgré sa simplicité d'implémentation, a révélé
 Le filtre de Kalman étendu s'est imposé comme la solution la plus performante, offrant plusieurs avantages déterminants. Il a fourni une **estimation des angles** plus précise grâce à son modèle d'estimation d'état sophistiqué, filtré efficacement les erreurs de mesure, et démontré une **robustesse** globale supérieure. La capacité de l'EKF à gérer les dynamiques non-linéaires et à fusionner de manière optimale les données de multiples capteurs s'est révélée particulièrement précieuse dans cette application.
 
 Cependant, les deux approches ont rencontré un défi majeur concernant l'intégration de la **vitesse GPS**. La fréquence d'échantillonnage insuffisante des données GPS a empêché les corrections basées sur la vitesse, rendant impossible la correction d'attitude par GPS initialement prévue avec le matériel actuel. Cette limitation suggère que les implémentations futures bénéficieraient d'une amélioration du matériel, en particulier l'utilisation de récepteurs GPS à plus haute fréquence.
+
+![alt text](image-4.png)
+*Estimation de la vitesse*
 
 Pour l'avenir, plusieurs axes d'amélioration ont été identifiés. La principale recommandation concerne l'intégration de **matériel GPS** à plus haute fréquence pour permettre des corrections plus efficaces basées sur la vitesse. De plus, une optimisation plus poussée des **matrices de covariance** de l'EKF pourrait potentiellement améliorer la précision des estimations, et la mise en œuvre de techniques de **filtrage adaptatif** pourrait améliorer la robustesse dans des conditions dynamiques variables.
 
