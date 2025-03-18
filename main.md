@@ -210,3 +210,13 @@ Le nouveau chemin est calculé en utilisant l'unique ensemble de points affecté
 
 Afin d'éviter des changements brusques de trajectoire, des périodes de transition sont introduites pour permettre au véhicule de s'adapter progressivement à l'évitement. Concrètement, avant l'évitement, une transition en sigmoid est effectuée pour que le véhicule commence à s'écarter de la trajectoire initiale. Cette transition est contrôlée par un paramètre de dilatation du sigmoid, qui détermine la vitesse à laquelle le véhicule s'écarte de la trajectoire.
 
+# Tests et Résultats
+
+## Simulation
+
+## Essai sur véhicule réel
+
+\newpage
+
+# Conclusion
+
