@@ -147,3 +147,41 @@ Cette architecture robuste et flexible permet au véhicule autonome de naviguer 
 
 ![Architecture Globale du module de Décision](img/image3.png)
 
+## Planification de trajectoires
+
+![Flowchart du module de trajectoire](img/image2.png)
+
+La planification de trajectoires est une composante essentielle du module de planification et de décision pour le véhicule autonome. Cette section détaille les méthodes et algorithmes utilisés pour générer des trajectoires sûres et optimales, permettant au véhicule de naviguer efficacement dans des environnements dynamiques.
+
+### Génération de Waypoints
+
+La génération de waypoints est la première étape de la planification de trajectoires. Les waypoints sont des points de passage que le véhicule doit suivre pour atteindre sa destination. Ces points sont déterminés par un nœud externe qui fournit une carte globale du trajet. L'algorithme de planification utilise ces waypoints pour créer une trajectoire initiale.
+
+### Interpolation par Splines Cubiques
+
+Pour assurer une navigation fluide et stable, les waypoints sont interpolés à l'aide de splines cubiques. L'outil EnhancedPathProcessor est utilisé pour cette tâche. Les splines cubiques permettent de générer des trajectoires lisses et continues, évitant ainsi les mouvements brusques et améliorant le confort de conduite. L'interpolation prend en compte les contraintes dynamiques de l'environnement, telles que la présence d'obstacles ou les conditions de la route.
+
+Les splines cubiques sont générées en utilisant des polynômes de degré trois pour interpoler les waypoints fournis. Chaque segment de la spline entre deux waypoints \( (x_i, y_i) \) et \( (x_{i+1}, y_{i+1}) \) est défini par une équation cubique de la forme :
+
+$$  S_i(x) = a_i + b_i(x - x_i) + c_i(x - x_i)^2 + d_i(x - x_i)^3 $$
+
+Les coefficients $a_i, b_i, c_i$ et $d_i$ sont déterminés de manière à assurer la continuité et la différentiabilité de la spline aux points de jonction. Les conditions de continuité imposent que la spline et ses premières et secondes dérivées soient continues aux waypoints. Cela se traduit par les équations suivantes :
+
+$$  S_i(x_i) = y_i $$
+$$  S_i(x_{i+1}) = y_{i+1} $$
+$$  S_i'(x_{i+1}) = S_{i+1}'(x_{i+1}) $$
+$$  S_i''(x_{i+1}) = S_{i+1}''(x_{i+1}) $$
+
+Ces conditions garantissent que la trajectoire générée est lisse et continue, permettant une navigation fluide du véhicule autonome.
+
+### Ajustement Dynamique des Trajectoires
+
+Les trajectoires générées sont continuellement ajustées en fonction des conditions environnementales et des obstacles détectés. L'outil AvoidanceToolset intègre les données d'obstacles retournés par les modules de perception pour calculer des trajectoires alternatives en temps réel, en utilisant la méthode des cycles limites. Cette approche permet au véhicule de naviguer en toute sécurité dans des environnements encombrés.
+
+Si la trajectoire candidate avec évitement sort de la voie, elle est considérée comme invalide. Dans ce cas, le système passe en état "Arrêt d'urgence" et arrête le véhicule en publiant une distance de freinage à 0 (que le contrôleur de vitesse interprète comme un freinage d'urgence).
+
+### Fourniture de la cible au contrôleur
+
+Une fois la trajectoire générée, une étape de map matching est réalisée pour déterminer le waypoint le plus proche du véhicule. Ensuite, la cible, définie comme le point suivant de la trajectoire, est fournie au contrôleur pour le suivi de cible. Le map matching est effectué en utilisant une méthode de recherche de plus proche voisin, en utilisant les coordonnées GNSS-RTK du véhicule et des waypoints.
+
+
