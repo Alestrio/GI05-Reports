@@ -184,4 +184,29 @@ Si la trajectoire candidate avec évitement sort de la voie, elle est considér�
 
 Une fois la trajectoire générée, une étape de map matching est réalisée pour déterminer le waypoint le plus proche du véhicule. Ensuite, la cible, définie comme le point suivant de la trajectoire, est fournie au contrôleur pour le suivi de cible. Le map matching est effectué en utilisant une méthode de recherche de plus proche voisin, en utilisant les coordonnées GNSS-RTK du véhicule et des waypoints.
 
+## Gestion des obstacles
+
+![Flowchart de la gestion des obstacles](img/image4.png){height=50%}
+
+La gestion des obstacles est un processus essentiel pour garantir la sécurité et l'efficacité du déplacement autonome. Ce processus peut être décomposé en plusieurs étapes clés, chacune jouant un rôle crucial dans la détection et l'évitement des obstacles.
+
+### Détection des Obstacles
+
+La détection des obstacles commence par la réception des données du module de perception. Ces données permettent d'identifier les objets présents dans l'environnement. À partir de ces informations, des objets "Obstacle" sont créés, chacun étant caractérisé par ses coordonnées (x, y), un rayon, et une échelle. Le rayon d'influence de chaque obstacle est ensuite calculé en multipliant le rayon par l'échelle, déterminant ainsi la zone affectée par l'obstacle.
+
+### Traitement des Obstacles
+
+Une fois les obstacles détectés, chaque obstacle est évalué pour déterminer son impact potentiel sur le chemin actuel. La direction d'évitement est calculée en utilisant une fonction spécifique, _get_avoidance_direction(), qui détermine si l'évitement doit se faire dans le sens horaire ou anti-horaire. Cette décision est basée sur le produit vectoriel. Ensuite, un chemin d'évitement est calculé pour contourner l'obstacle de manière progressive, en utilisant les équations de TourbillonClock.
+
+### Affinement du Chemin
+
+L'affinement du chemin implique l'identification des points du chemin actuel qui sont affectés par les obstacles. Un nouveau chemin alternatif est généré pour éviter ces obstacles tout en assurant une transition en douceur. Ce chemin est ensuite vérifié pour s'assurer qu'il respecte les limites de la route, en utilisant des fonctions comme check_path_within_boundaries() et en respectant les marges de sécurité (lane_left_gap et lane_right_gap).
+
+Le nouveau chemin est calculé en utilisant l'unique ensemble de points affecté par l'obstacle, le plus proche de l'obstacle. Cela permet d'éviter de créer un chemin invalide (qui croiserait la trajectoire de retour du véhicule) considérant que la probabilité que l'obstacle soit toujours présent au retour est faible (le piéton a traversé par exemple).
+
+![Trajectoire avec l'évitement d'un obstacle](img/image5.png)
+
+### Périodes de transition
+
+Afin d'éviter des changements brusques de trajectoire, des périodes de transition sont introduites pour permettre au véhicule de s'adapter progressivement à l'évitement. Concrètement, avant l'évitement, une transition en sigmoid est effectuée pour que le véhicule commence à s'écarter de la trajectoire initiale. Cette transition est contrôlée par un paramètre de dilatation du sigmoid, qui détermine la vitesse à laquelle le véhicule s'écarte de la trajectoire.
 
