@@ -1,10 +1,9 @@
 ---
 note_type: plan
 writing_type: draft 
-title: "AI32 - Compte Rendu TP1"
-subtitle : "TP1 - FISA"
-author: Alexis LEBEL, Justin FERDINAND
-date: "A23"
+title: "TX7676 - Rapport Final"
+author: Alexis LEBEL
+date: "A24"
 titlepage: true 
 titlepage-rule-color: "006a9e" 
 titlepage-text-color: "080808" 
@@ -45,4 +44,16 @@ output:
         template: eisvogel
         listings: true
 ---
+
+# Introduction {.unnumbered .unlisted}
+
+Le Challenge UTAC est une compétition internationale qui rassemble universités, écoles d'ingénieurs et Instituts Universitaires de Technologie (IUT) autour des défis de la mobilité future. Organisée par des acteurs de l'industrie automobile, dont la Société des Ingénieurs de l'Automobile (SIA), cette compétition encourage les étudiants à innover dans des domaines tels que la conduite autonome, la connectivité et la cybersécurité. Les démonstrations et présentations se déroulent sur le circuit de Linas-Montlhéry, offrant une plateforme pour les innovations étudiantes.
+
+Le projet UTonome, porté par l'association éponyme de l'Université de Technologie de Compiègne (UTC), vise à représenter l'UTC lors de ce challenge. L'association, structurée en quatre pôles spécialisés — Simulation, Planification, Ordonnancement et Perception — regroupe des étudiants intéressés par les technologies de mobilité. En tant qu'étudiant, j'ai contribué au développement d'un module de planification et de décision pour un véhicule autonome.
+
+Ce module, intégré dans un système basé sur le framework ROS (Robot Operating System), permet au véhicule de naviguer de manière autonome et sécurisée dans des environnements dynamiques. Il inclut des fonctionnalités telles que la gestion des obstacles, la planification de trajectoires optimales, et la visualisation en temps réel des données de navigation.
+
+Ce rapport présente les étapes de développement du module de planification et de décision, ainsi que les résultats obtenus lors des tests sur simulateur. Il détaille les choix techniques, les algorithmes implémentés, et les perspectives d'amélioration pour les prochaines itérations du projet.
+
+\newpage
 
