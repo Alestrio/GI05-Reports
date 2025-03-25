@@ -2,6 +2,12 @@
 note_type: plan
 writing_type: draft 
 title: "TX7676 - Rapport Final"
+subtitle: |
+    Table des Révisions
+    | Révision | Date | Auteur | Commentaires |
+    |:--------:|:----:|:------:|:------------:|
+    |   /      | 19/03/2025 | Alexis LEBEL | Création du document |
+    |   A      | 26/03/2025 | Alexis LEBEL | Ajout de bibliographie, édition des parties prenantes - Intro |
 author: Alexis LEBEL
 date: "A24"
 titlepage: true 
@@ -49,7 +55,7 @@ output:
 
 Le Challenge UTAC est une compétition internationale qui rassemble universités, écoles d'ingénieurs et écoles spécialisées, autour des défis de la mobilité future. Organisée par des acteurs de l'industrie automobile, dont la Société des Ingénieurs de l'Automobile (SIA), cette compétition encourage les étudiants à innover dans des domaines tels que la conduite autonome, la connectivité et la cybersécurité. Les démonstrations et présentations se déroulent sur le circuit de Linas-Montlhéry, offrant une plateforme pour les innovations étudiantes.
 
-Le projet UTonome, porté par l'association éponyme de l'Université de Technologie de Compiègne (UTC), vise à représenter l'UTC lors de ce challenge. L'association, structurée en quatre pôles spécialisés — Simulation, Planification, Ordonnancement et Perception — regroupe des étudiants intéressés par les technologies de mobilité. En tant qu'étudiant, j'ai contribué au développement d'un module de planification et de décision pour un véhicule autonome.
+Le projet UTonome, porté d'une part par l'association éponyme de l'Université de Technologie de Compiègne (UTC), et d'autre part par l'équipe enseignante à travers des UV TX et du tutorat, vise à représenter l'UTC lors de ce challenge. L'association, structurée en quatre pôles spécialisés — Simulation, Planification, Ordonnancement et Perception — regroupe des étudiants intéressés par les technologies de mobilité. En tant qu'étudiant, j'ai contribué au développement d'un module de planification et de décision pour un véhicule autonome.
 
 Ce module, intégré dans un système basé sur le framework ROS (Robot Operating System), permet au véhicule de naviguer de manière autonome et sécurisée dans des environnements dynamiques. Il inclut des fonctionnalités telles que la gestion des obstacles, la planification de trajectoires optimales, et la visualisation en temps réel des données de navigation.
 
@@ -579,7 +585,7 @@ La principale différence entre simulation et réalité concernait la dynamique 
 
 \newpage
 
-# Conclusion
+# Conclusion {.unnumbered .unlisted}
 
 Ce travail de développement et d'intégration d'un module de planification et de décision pour véhicule autonome s'inscrit dans le cadre de la TX7676, avec des composants réutilisés par l'UV SY27/AI36.
 
@@ -592,3 +598,10 @@ Les essais d'intégration Matlab sur le véhicule ont été rendus possibles gr�
 Les résultats obtenus lors des tests sur simulateur démontrent la viabilité de l'approche adoptée. Le module est capable de générer des trajectoires fluides et de contourner efficacement les obstacles tout en respectant les contraintes de la route.
 
 Ce travail constitue une base solide pour le développement continu du projet UTonome et contribue à l'avancement des technologies de conduite autonome au sein de l'UTC. La combinaison d'approches théoriques rigoureuses et de simulations exhaustives a permis de développer un module à la fois performant et réaliste, capable de répondre aux défis complexes de la navigation autonome en environnement dynamique.
+
+# Bibliographie {.unlisted .unnumbered}
+
+1. Reactive versus cognitive vehicle navigation based on optimal local and global PELC∗, L. ADOUANE, 2016 => Dynamique des cycles limites
+2. Matlab ROS Documentation, MathWorks => Utilisation de ROS avec MATLAB
+3. SciPy Documentation, SciPy.org => Utilisation de splines cubiques
+4. Final de SY27, A24 => Idée de l'utilisation d'un sigmoïde pour les transitions
